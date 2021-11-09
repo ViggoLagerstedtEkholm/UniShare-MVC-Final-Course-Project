@@ -1,30 +1,116 @@
-<div class="container">
-   <div class="content-container">
-     <div class="flex-item">
-       <div class="user-input-form-box">
-         <h3> Enter project information</h3>
-         <form method="post" enctype='multipart/form-data' action='/UniShare/project/upload'>
-           <input class="user-input-text" type="text" name="link" placeholder="Enter link">
-           <input class="user-input-text" type="text" name="name" placeholder="Project name" required>
-           <br />
-           <textarea class="user-input-text" name="description" placeholder="Enter description" required></textarea>
-           <p>
-             Project image
-             <input class="form-text" type='file' name='project-file' required/>
-           </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniShare</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <link rel="stylesheet" href="/9.0/css/style.css">
+    <link rel="stylesheet" href="/9.0/css/header.css">
+    <link rel="stylesheet" href="/9.0/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
 
-           <h3>Create default image with text</h3>
-           <input type='hidden'  name='customCheck' value='Off'>
-           <input type="checkbox" name="customCheck" value="On">
-           <p>
-             <input class="user-input-text" type="text" name="custom" placeholder="TEXT">
-           </p>
-           <p>
-             <input class="button-style-1" type="submit" name="submit_project" value="Upload">
-           </p>
-         </form>
-       </div>
+<nav>
+    <div class="logo">
+        <h4>UniShare</h4>
     </div>
-  </div>
+    <ul class="nav-links">
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/profile?ID=---ID---'>Profile</a></li>
+        <li><a href='/9.0/logout'>Logout</a></li>
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/login'>Login</a></li>
+        <li><a href='/9.0/register'>Register</a></li>
+        <!--===edit===-->
+    </ul>
+</nav>
+<div id="header2">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/search/people'>People</a>
+        </li>
+        <li>
+            <a href='/9.0/search/courses'>Courses</a>
+        </li>
+        <li>
+            <a href='/9.0/search/forums'>Forum</a>
+        </li>
+    </ul>
 </div>
+
+<!--===edit===-->
+<div id="adminHeader">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/admin'>Administer website content</a>
+        </li>
+    </ul>
+</div>
+<!--===edit===-->
+
+<div class="container">
+    <h2> Add project.</h2>
+    <hr/>
+
+    <div class="user-input-form-box">
+        <form method="post" enctype='multipart/form-data' action='/9.0/project/upload'>
+            <h4>Valid links are either http/https. Example of valid link: https://test.com</h4>
+            <label for="link">Link</label>
+            <input id="link" class="user-input-text" type="text" name="link" placeholder="Enter link">
+
+            <h4>Special characters and spaces allowed. Between 1 and 150 characters. No numbers allowed.</h4>
+            <label for="name">Name</label>
+            <input id="name" class="user-input-text" type="text" name="name" placeholder="Project name" required>
+
+            <br/>
+
+            <h4>Characters between 5 and 2000 allowed.</h4>
+            <label for="description">Description</label>
+            <textarea id="description" class="user-input-text" name="description" placeholder="Enter description"
+                      required></textarea>
+
+            <h1>Upload an image OR check the box and write the image text.</h1>
+
+            <h2>
+                Project image
+            </h2>
+
+            <h4>GIF, JPEG, PNG allowed file formats. Don't upload copyright material.</h4>
+            <input class="form-text" type='file' name='project-file'/>
+
+            <hr/>
+
+            <h4>Create default image with text</h4>
+            <input type='hidden' name='customCheck' value='Off'>
+            <input type="checkbox" name="customCheck" value="On">
+
+            <label for="text"></label>
+            <input id="text" class="user-input-text" type="text" name="text" placeholder="TEXT">
+
+            <p>
+                <input class="button-style-1" type="submit" name="submit_project" value="Upload">
+            </p>
+        </form>
+    </div>
+</div>
+<ul class="footer footer-content">
+    <li class="footer-links">
+        <h1>About</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Project on github</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Contact us</h1>
+    </li>
+</ul>
+</body>
+</html>
+
+
 

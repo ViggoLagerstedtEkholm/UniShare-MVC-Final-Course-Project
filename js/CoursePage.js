@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     $('select').on('change', function () {
         $.ajax({
-            url: "/UniShare/course/setrate",
+            url: "/9.0/course/setrate",
             type: "POST",
             data: {courseID: courseID, rating: this.value},
             dataType: "json",
@@ -18,7 +18,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: "/UniShare/course/getrate",
+        url: "/9.0/course/getrate",
         type: 'GET',
         data: {courseID: courseID},
         dataType: "json",
@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: "/UniShare/course/getGraphData",
+        url: "/9.0/course/getGraphData",
         type: 'GET',
         data: {courseID: courseID},
         dataType: "json",

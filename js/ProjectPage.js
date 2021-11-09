@@ -2,7 +2,7 @@ $(document).ready(function () {
     const projectID = document.getElementById('projectID').value;
 
     $.ajax({
-        url: "/UniShare/project/get",
+        url: "/9.0/project/get",
         type: 'GET',
         data: {projectID: projectID},
         dataType: "json",

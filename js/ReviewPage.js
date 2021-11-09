@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: "/UniShare/review/get",
+        url: "/9.0/review/get",
         type: 'GET',
         data: {courseID: document.getElementById('courseID').value},
         dataType: "json",

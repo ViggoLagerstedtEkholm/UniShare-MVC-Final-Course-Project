@@ -74,37 +74,18 @@ class Router
     }
 
     /**
-     * This method is what actually draws the page to the user. We get the parameters
+     * This method is what draws the page to the user. We get the parameters
      * and file path information to fetch the required files and finally return the view.
      * We use placeholders to replace the header/footer/content. This is efficient because
      * that allows us to have header and footer content in separate files to display on every page.
      * @param $folder
      * @param $view
      * @param array $params
-     * @param false[] $errorParams
      * @return array|string
      */
-    public function renderView($folder, $view, array $params = [], array $errorParams = ['isError' => false]): array|string
+    public function renderView($folder, $view, array $params = []): array|string
     {
-        $layoutContent = $this->layoutContent();
-        $viewContent = $this->renderOnlyView($folder, $view, $params);
-        $header = $this->renderOnlyView('layout', 'header', $errorParams);
-        $footer = $this->renderOnlyView('layout', 'footer', $errorParams);
-
-        $temp = str_replace('---header---', $header, $layoutContent);
-        $temp = str_replace('---footer---', $footer, $temp);
-        return str_replace('---content---', $viewContent, $temp);
-    }
-
-    /**
-     * Get the main layout with the HTML/HEAD/BODY tags.
-     * @return false|string
-     */
-    protected function layoutContent(): bool|string
-    {
-        ob_start();
-        include_once Application::$ROOT_DIR . "/UniShare/app/views/layout/Main.html";
-        return ob_get_clean();
+        return $this->renderOnlyView($folder, $view, $params);
     }
 
     /**
@@ -122,7 +103,7 @@ class Router
         }
 
         ob_start();
-        include_once Application::$ROOT_DIR . "/UniShare/app/views/$folder/$view.php";
+        include_once Application::$ROOT_DIR . "/9.0/app/views/$folder/$view.php";
         return ob_get_clean();
     }
 }

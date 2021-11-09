@@ -1,6 +1,6 @@
 function toggleCourseToDegree(courseID) {
     $.ajax({
-        url: "/UniShare/toggleCourseToDegree",
+        url: "/9.0/toggleCourseToDegree",
         type: "POST",
         data: {courseID: courseID},
         dataType: "json",

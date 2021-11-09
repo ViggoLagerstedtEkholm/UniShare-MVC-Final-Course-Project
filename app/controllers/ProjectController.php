@@ -2,12 +2,16 @@
 
 namespace App\controllers;
 
-use App\Models\MVCModels\Projects;
+use App\Core\Exceptions\GDResizeException;
+use App\core\Exceptions\NotFoundException;
+use App\includes\ImageValidator;
+use App\Models\Projects;
 use App\Core\Request;
 use App\Core\Session;
 use App\Core\Application;
 use App\Core\ImageHandler;
 use App\Middleware\AuthenticationMiddleware;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * Project controller for handling projects.
@@ -38,6 +42,7 @@ class ProjectController extends Controller
     /**
      * This method shows the project update page.
      * @return string
+     * @throws NotFoundException
      */
     public function update(): string
     {
@@ -52,54 +57,127 @@ class ProjectController extends Controller
         } else {
             Application::$app->redirect("./");
         }
+
+        return throw new NotFoundException();
     }
 
     /**
      * This method handles adding new projects.
      * @param Request $request
+     * @throws GDResizeException
      */
     public function uploadProject(Request $request)
     {
         $fileUploadName = 'project-file';
         $userID = Session::get(SESSION_USERID);
-        $body = $request->getBody();
-
-        if ($body["customCheck"] == "Off") {
-            $params = [
-                "link" => $body["link"],
-                "name" => $body["name"],
-                "description" => $body["description"],
-                "project-file" => $fileUploadName,
-                "customCheck" => $body["customCheck"]
-            ];
-        } else {
-            $params = [
-                "link" => $body["link"],
-                "name" => $body["name"],
-                "description" => $body["description"],
-                "custom" => $body["custom"],
-                "customCheck" => $body["customCheck"]
-            ];
-        }
 
         //Check all fields + image validity
-        $errors = $this->projects->validate($params);
+        $result = $this->validateUpload($request, $fileUploadName);
+        $errors = $result['errors'];
+        $params = $result['params'];
 
         if (count($errors) > 0) {
             $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/profile?ID=$userID&$errorList");
+            Application::$app->redirect("/9.0/project/add?&$errorList");
             exit();
         }
 
         if ($params["customCheck"] == "On") {
-            $image = $this->imageHandler->createImageFromText($params["custom"]);
+            $image = $this->imageHandler->createImageFromText($params["text"]);
         } else {
             $originalImage = $_FILES[$fileUploadName];
             $image = $this->imageHandler->handleUploadResizing($originalImage);
         }
 
         $this->projects->uploadProject($params, $userID, $image);
-        Application::$app->redirect("/UniShare/profile?ID=$userID");
+        Application::$app->redirect("/9.0/profile?ID=$userID");
+    }
+
+    /**
+     * Update project.
+     * @param Request $request
+     * @return void
+     * @throws GDResizeException
+     */
+    public function updateProject(Request $request)
+    {
+        $fileUploadName = 'project-file';
+        $userID = Session::get(SESSION_USERID);
+
+        $body = $request->getBody();
+        $projectID = $body["projectID"];
+
+        $result = $this->validateUpload($request, $fileUploadName);
+        $errors = $result['errors'];
+        $params = $result['params'];
+
+        if (!ImageValidator::hasValidUpload($fileUploadName) && $params["customCheck"] != "On")
+        {
+            if (!ImageValidator::hasValidImageExtension($fileUploadName))
+            {
+                $errors[] = INVALID_IMAGE;
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errorList = http_build_query(array('error' => $errors));
+            Application::$app->redirect("/9.0/project/update?ID= $projectID&$errorList");
+            exit();
+        }
+
+        $canUpdate = $this->projects->checkIfUserOwner($userID, $projectID);
+
+        if ($canUpdate && !empty($projectID)) {
+            if ($params["customCheck"] == "On") {
+                $image = $this->imageHandler->createImageFromText($params["text"]);
+            } else {
+                $originalImage = $_FILES[$fileUploadName];
+                $image = $this->imageHandler->handleUploadResizing($originalImage);
+            }
+            $this->projects->updateProject($projectID, $params, $image);
+            $TEST = $params["customCheck"];
+            Application::$app->redirect("../profile?ID=$userID&test=$TEST");
+        } else {
+            Application::$app->redirect("../");
+        }
+    }
+
+    /**
+     * Validate the uploaded project.
+     * @param Request $request
+     * @param string $fileUploadName
+     * @return array
+     */
+    #[ArrayShape(['errors' => "array", 'params' => "array"])]
+    private function validateUpload(Request $request, string $fileUploadName): array
+    {
+        $body = $request->getBody();
+
+        if ($body["customCheck"] == "On") {
+            $params = [
+                "link" => $body["link"],
+                "name" => $body["name"],
+                "description" => $body["description"],
+                "text" => $body["text"],
+                "customCheck" => $body["customCheck"]
+            ];
+        } else {
+            $params = [
+                "link" => $body["link"],
+                "name" => $body["name"],
+                "file" => $fileUploadName,
+                "description" => $body["description"],
+                "customCheck" => $body["customCheck"]
+            ];
+
+        }
+
+        $errors = $this->projects->validate($params);
+
+        return [
+            'errors' => $errors,
+            'params' => $params
+        ];
     }
 
     /**
@@ -124,7 +202,12 @@ class ProjectController extends Controller
         }
     }
 
-    public function getProjectForEdit(Request $request)
+    /**
+     * This method gets project that we want to edit.
+     * @param Request $request
+     * @return false|string
+     */
+    public function getProjectForEdit(Request $request): bool|string
     {
         $body = $request->getBody();
         $projectID = $body["projectID"];
@@ -146,44 +229,6 @@ class ProjectController extends Controller
         } else {
             $resp = ['success' => false, 'data' => ['Project' => $project]];
             return $this->jsonResponse($resp, 403);
-        }
-    }
-
-    public function updateProject(Request $request)
-    {
-        $fileUploadName = 'project-file';
-        $userID = Session::get(SESSION_USERID);
-
-        $body = $request->getBody();
-        $projectID = $body["projectID"];
-
-        $params = [
-            "projectID" => $projectID,
-            "link" => $body["link"],
-            "name" => $body["name"],
-            "description" => $body["description"],
-            "project-file" => $fileUploadName,
-            "customCheck" => "Off"
-        ];
-
-        //Check all fields + image validity
-        $errors = $this->projects->validate($params);
-
-        if (count($errors) > 0) {
-            $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/project/update?ID= $projectID&$errorList");
-            exit();
-        }
-
-        $canUpdate = $this->projects->checkIfUserOwner($userID, $projectID);
-
-        if ($canUpdate) {
-            $originalImage = $_FILES[$fileUploadName];
-            $resizedImage = $this->imageHandler->handleUploadResizing($originalImage);
-            $this->projects->updateProject($projectID, $params, $resizedImage);
-            Application::$app->redirect("../profile?ID=$userID");
-        } else {
-            Application::$app->redirect("../");
         }
     }
 }

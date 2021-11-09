@@ -1,125 +1,180 @@
-    <div class="container">
-      <form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniShare</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <link rel="stylesheet" href="/9.0/css/style.css">
+    <link rel="stylesheet" href="/9.0/css/header.css">
+    <link rel="stylesheet" href="/9.0/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        <h4>UniShare</h4>
+    </div>
+    <ul class="nav-links">
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/profile?ID=---ID---'>Profile</a></li>
+        <li><a href='/9.0/logout'>Logout</a></li>
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/login'>Login</a></li>
+        <li><a href='/9.0/register'>Register</a></li>
+        <!--===edit===-->
+    </ul>
+</nav>
+<div id="header2">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/search/people'>People</a>
+        </li>
+        <li>
+            <a href='/9.0/search/courses'>Courses</a>
+        </li>
+        <li>
+            <a href='/9.0/search/forums'>Forum</a>
+        </li>
+    </ul>
+</div>
+
+<!--===edit===-->
+<div id="adminHeader">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/admin'>Administer website content</a>
+        </li>
+    </ul>
+</div>
+<!--===edit===-->
+
+<div class="container">
+    <form>
         <div class="content-filter-box filter-background-box">
-          <div class="row">
-            <div class="column">
-              <p>
-                Select filter option
-              </p>
-              <select class="content-filter-select" name="filter_option">
-                <option value="userDisplayName">Username</option>
-                <option value="visits">Visits</option>
-                <option value="lastOnline">Last online</option>
-              </select>
-            </div>
+            <div class="row">
+                <div class="column">
+                    <p>
+                        Select filter option
+                    </p>
+                    <select class="content-filter-select" name="filter_option">
+                        <option value="userDisplayName">Username</option>
+                        <option value="visits">Visits</option>
+                        <option value="lastOnline">Last online</option>
+                    </select>
+                </div>
 
-            <div class="column">
-              <p>
-                Results per page
-              </p>
-              <select class="content-filter-select" name="results_per_page_count">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7" selected="selected">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
+                <div class="column">
+                    <p>
+                        Results per page
+                    </p>
+                    <select class="content-filter-select" name="results_per_page_count">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7" selected="selected">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              Search
-              <input class="user-input-text" id="email" type="text" name="search" placeholder="Search">
+            <div class="row">
+                <div class="column">
+                    Search
+                    <input class="user-input-text" id="email" type="text" name="search" placeholder="Search">
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="column">
-              <fieldset name="filter_order">
-                   <label>ASC</label>
-                   <input type="radio" name="action" id="option-1" value="ASC">
-                   <label>DESC</label>
-                   <input type="radio" name="action" id="option-2" value="DESC" checked>
-              </fieldset>
+            <div class="row">
+                <div class="column">
+                    <fieldset name="filter_order">
+                        <label>ASC</label>
+                        <input type="radio" name="action" id="option-1" value="ASC">
+                        <label>DESC</label>
+                        <input type="radio" name="action" id="option-2" value="DESC" checked>
+                    </fieldset>
+                </div>
             </div>
-          </div>
-          <button class="button-style-4" type="submit" name="filter_button" value="GO">Filter</button>
+            <button class="button-style-4" type="submit" name="filter_button" value="GO">Filter</button>
         </div>
-      </form>
+    </form>
 
-      <div class="display-result-box">
+    <div class="display-result-box">
         <p class="txt-small">
-          Total page count: ---page-count---
+            Total page count: ---page-count---
         </p>
 
         <p class="txt-small">
-          Page index: ---page---
+            Page index: ---page---
         </p>
 
         <p class="txt-small">
-          Range: ---range---
+            Range: ---range---
         </p>
 
         <!--===edit===-->
         <div class="content-card-body">
-          <div class="content-user">
-            <div class="content-card-image">
-              <img src="---SRC---" alt="USER IMAGE">
-            </div>
+            <div class="content-user">
+                <div class="content-card-image">
+                    <img src="---SRC---" alt="USER IMAGE">
+                </div>
 
-            <div class="content-card-info">
-              <h4><b>Personal information</b></h4>
-              <p><b>First name:</b> ---first_name---</p>
-              <p><b>Last name:</b> ---last_name---</p>
-              <p><b>Username: </b>---username---</p>
-            </div>
+                <div class="content-card-info">
+                    <h4><b>Personal information</b></h4>
+                    <p><b>First name:</b> ---first_name---</p>
+                    <p><b>Last name:</b> ---last_name---</p>
+                    <p><b>Username: </b>---username---</p>
+                </div>
 
-            <div class="content-card-info">
-              <h4><b>Personal information</b></h4>
-              <p><b>Visits:</b> ---visits---</p>
-              <p><b>Last online:</b> ---last_online---</p>
-            </div>
+                <div class="content-card-info">
+                    <h4><b>Personal information</b></h4>
+                    <p><b>Visits:</b> ---visits---</p>
+                    <p><b>Last online:</b> ---last_online---</p>
+                </div>
 
-            <div class="content-card-info-buttons">
-              <form action="/UniShare/profile" method="get">
-                <input type="hidden" name="ID" value="---ID---" />
-                <button class="button-style-1" type="submit">Visit</button>
-              </form>
+                <div class="content-card-info-buttons">
+                    <form action="/9.0/profile" method="get">
+                        <input type="hidden" name="ID" value="---ID---"/>
+                        <button class="button-style-1" type="submit">Visit</button>
+                    </form>
+                </div>
             </div>
-          </div>
         </div>
         <!--===edit===-->
-      </div>
+    </div>
 
-      <hr />
+    <hr/>
 
-      <div class="content-pagination">
-          <div class="content-pagination-bar">
+    <div class="content-pagination">
+        <div class="content-pagination-bar">
             <!--===edit===-->
             <div>
-              <form method="GET">
-                <input type="hidden" name="results_per_page_count" value="---results_per_page_count---" />
-                <input type="hidden" name="action" value="---action---" />
-                <input type="hidden" name="search" value="---search---" />
-                <input type="hidden" name="filter_option" value="---filter_option---" />
-                <input type="hidden" name="page" value="---page---" />
-                <button type="submit" class="pagination-button">🡸</button>
-              </form>
+                <form method="GET">
+                    <input type="hidden" name="results_per_page_count" value="---results_per_page_count---"/>
+                    <input type="hidden" name="action" value="---action---"/>
+                    <input type="hidden" name="search" value="---search---"/>
+                    <input type="hidden" name="filter_option" value="---filter_option---"/>
+                    <input type="hidden" name="page" value="---page---"/>
+                    <button type="submit" class="pagination-button">🡸</button>
+                </form>
             </div>
             <!--===edit===-->
             <div>
-              <form method="GET">
-                <input type="hidden" name="results_per_page_count" value="---results_per_page_count---" />
-                <input type="hidden" name="action" value="---action---" />
-                <input type="hidden" name="search" value="---search---" />
-                <input type="hidden" name="filter_option" value="---filter_option---" />
-                <input type="hidden" name="page" value="---page---" />
-                <button type="submit" class="pagination-button">🡺</button>
-              </form>
+                <form method="GET">
+                    <input type="hidden" name="results_per_page_count" value="---results_per_page_count---"/>
+                    <input type="hidden" name="action" value="---action---"/>
+                    <input type="hidden" name="search" value="---search---"/>
+                    <input type="hidden" name="filter_option" value="---filter_option---"/>
+                    <input type="hidden" name="page" value="---page---"/>
+                    <button type="submit" class="pagination-button">🡺</button>
+                </form>
             </div>
             <!--===edit===-->
         </div>
@@ -128,8 +183,21 @@
             <input type="text" name="action" value="---action---" hidden>
             <input type="text" name="search" value="---search---" hidden>
             <input type="text" name="results_per_page_count" value="---results_per_page_count---" hidden>
-            <input class="user-input-text" type="number" name="page"  placeholder="PAGE INDEX" required>
+            <input class="user-input-text" type="number" name="page" placeholder="PAGE INDEX" required>
             <input class="button-style-4" type="submit" name="submit" value="Go to page">
         </form>
-      </div>
     </div>
+</div>
+<ul class="footer footer-content">
+    <li class="footer-links">
+        <h1>About</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Project on github</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Contact us</h1>
+    </li>
+</ul>
+</body>
+</html>

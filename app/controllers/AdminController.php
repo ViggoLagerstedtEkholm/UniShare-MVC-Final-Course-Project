@@ -2,10 +2,9 @@
 
 namespace App\controllers;
 
-use App\Core\Application;
 use App\Core\Request;
-use App\Models\MVCModels\Courses;
-use App\Models\MVCModels\Requests;
+use App\Models\Courses;
+use App\Models\Requests;
 use App\Middleware\AuthenticationMiddleware;
 use Throwable;
 
@@ -42,37 +41,12 @@ class AdminController extends Controller
     }
 
     /**
-     * This method handles adding a course to the database.
-     * @param Request $request
-     */
-    public function addCourse(Request $request)
-    {
-        $body = $request->getBody();
-
-        $errors = $this->courses->validate($body);
-
-        if (count($errors) > 0) {
-            $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/admin?$errorList");
-            exit();
-        }
-
-        $hasSucceeded = $this->courses->insertCourse($body);
-
-        if ($hasSucceeded) {
-            Application::$app->redirect("/UniShare/admin");
-        } else {
-            Application::$app->redirect("/UniShare/admin?error=true");
-        }
-    }
-
-    /**
      * This method handles approving requested courses from users.
      * @param Request $request
      * @return false|string
      * @throws Throwable
      */
-    public function approveRequest(Request $request)
+    public function approveRequest(Request $request): bool|string
     {
         $body = $request->getBody();
         $requestID = $body["requestID"];
@@ -93,7 +67,7 @@ class AdminController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function denyRequest(Request $request)
+    public function denyRequest(Request $request): bool|string
     {
         $body = $request->getBody();
         $requestID = $body["requestID"];

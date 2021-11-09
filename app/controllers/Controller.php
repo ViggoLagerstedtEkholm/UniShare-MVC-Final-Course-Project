@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\controllers;
 
 use App\Middleware\Middleware;
 use App\Core\Application;
@@ -35,24 +35,25 @@ abstract class Controller
     }
 
     /**
-     * Display the view with the required parameters aquired from the controller.
-     * @param folder view folder
-     * @param page view file
-     * @param params parameters
+     * Display the view with the required parameters acquired from the controller.
+     * @param string $folder
+     * @param string $page
+     * @param array $params
+     * @return string
      */
-    protected function display($folder, $page, $params): string
+    protected function display(string $folder, string $page, array $params): string
     {
         return Application::$app->router->renderView($folder, $page, $params);
     }
 
     /**
-     * Display the view with the required parameters aquired from the controller.
-     * @param count total amount of items that needs pagination.
-     * @param page the current page index.
-     * @param result_page_count_selected the amount of results per page.
+     * Calculate the offset for the pagination.
+     * @param int $count
+     * @param int $page
+     * @param int $result_page_count_selected
      * @return array all parameters to query the database with the offsets calculated.
      */
-    protected function calculateOffsets($count, $page, $result_page_count_selected): array
+    protected function calculateOffsets(int $count, int $page, int $result_page_count_selected): array
     {
         $values = array();
         $results_per_page = $result_page_count_selected;
@@ -68,13 +69,11 @@ abstract class Controller
     /**
      * Returns a json response that we can use to handle responses from user requests.
      * @param resp the JSON type data.
-     * @param code status code.
+     * @param int $code
      * @return false|string
      */
-    protected function jsonResponse($resp, $code)
+    protected function jsonResponse(mixed $resp, int $code): bool|string
     {
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: applicaton/json; charset=UTF-8");
         http_response_code($code);
         return json_encode($resp);
     }

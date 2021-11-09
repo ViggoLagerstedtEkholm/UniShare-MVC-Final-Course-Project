@@ -2,12 +2,12 @@
 
 namespace App\controllers;
 
+use App\core\Exceptions\NotFoundException;
 use App\Middleware\AuthenticationMiddleware;
-use App\Models\MVCModels\Courses;
-use App\Models\MVCModels\Reviews;
+use App\Models\Courses;
+use App\Models\Reviews;
 use App\Core\Session;
 use App\Core\Request;
-use App\Core\Application;
 
 /**
  * Course controller for course handling.
@@ -29,12 +29,17 @@ class CourseController extends Controller
     /**
      * This method gets the course information and passes it the the view.
      * @return string
+     * @throws NotFoundException
      */
     public function view(): string
     {
         if (isset($_GET["ID"])) {
             $ID = $_GET["ID"];
             if (!empty($ID)) {
+
+                if(!$this->courses->getCourse($ID)){
+                    return throw new NotFoundException();
+                }
 
                 if (isset($_GET['page'])) {
                     $page = $_GET['page'];
@@ -83,10 +88,15 @@ class CourseController extends Controller
                 return $this->display('courses', 'courses', $params);
             }
         }
-        Application::$app->redirect('./');
+        return throw new NotFoundException();
     }
 
-    public function getRatingGraphData(Request $request)
+    /**
+     * This method gets the rating graph data from the course ID.
+     * @param Request $request
+     * @return false|string
+     */
+    public function getRatingGraphData(Request $request): bool|string
     {
         $ratingRequest = $request->getBody();
         $courseID = $ratingRequest["courseID"];
@@ -102,7 +112,7 @@ class CourseController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function setRate(Request $request)
+    public function setRate(Request $request): bool|string
     {
         $ratingRequest = $request->getBody();
         $courseID = $ratingRequest["courseID"];
@@ -117,7 +127,7 @@ class CourseController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function getRate(Request $request)
+    public function getRate(Request $request): bool|string
     {
         $ratingRequest = $request->getBody();
         $courseID = $ratingRequest["courseID"];

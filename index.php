@@ -1,9 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Core\Application;
-use App\Core\Cookie;
-use App\Core\Session;
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+
+use App\core\Application;
+use App\core\Cookie;
+use App\core\Session;
 
 use App\controllers\HomeController;
 use App\controllers\AuthenticationController;
@@ -16,7 +20,6 @@ use App\controllers\AdminController;
 use App\controllers\DegreeController;
 use App\controllers\RequestController;
 use App\controllers\ForumController;
-use App\controllers\PublicationController;
 use App\controllers\ReviewController;
 use App\controllers\PostController;
 
@@ -24,6 +27,7 @@ require_once(__DIR__ . '/config.php');
 
 session_start();
 
+//Login using cookie if cookie exists.
 if(Cookie::exists(REMEMBER_ME_COOKIE_NAME) && !Session::exists(SESSION_USERID)){
   $authenticationController = new AuthenticationController();
   $authenticationController->loginWithCookie();
@@ -33,6 +37,7 @@ $app = new Application(dirname(__DIR__));
 
 $app->router->get('/', [HomeController::class, 'view']);
 
+$app->router->get('/isLoggedIn', [AuthenticationController::class, 'isLoggedIn']);
 $app->router->get('/register', [AuthenticationController::class, 'view_register']);
 $app->router->post('/register', [AuthenticationController::class, 'register']);
 $app->router->get('/login', [AuthenticationController::class, 'view_login']);
@@ -40,7 +45,6 @@ $app->router->post('/login', [AuthenticationController::class, 'login']);
 $app->router->get('/logout', [AuthenticationController::class, 'logout']);
 
 $app->router->get('/profile', [ProfileController::class, 'view']);
-$app->router->post('/profile/upload/image', [ProfileController::class, 'uploadImage']);
 $app->router->post('/profile/upload/image', [ProfileController::class, 'uploadImage']);
 $app->router->post('/profile/add/comment', [ProfileController::class, 'addComment']);
 $app->router->post('/profile/delete/comment', [ProfileController::class, 'deleteComment']);
@@ -80,16 +84,9 @@ $app->router->post('/degree/update', [DegreeController::class, 'updateDegree']);
 $app->router->get('/search/people', [ContentController::class, 'people']);
 $app->router->get('/search/courses', [ContentController::class, 'courses']);
 $app->router->get('/search/forums', [ContentController::class, 'forum']);
-$app->router->get('/searchCourses', [ContentController::class, 'courses']);
 $app->router->post('/toggleCourseToDegree', [ContentController::class, 'toggleCourseToDegree']);
 
 $app->router->get('/admin', [AdminController::class, 'view']);
-$app->router->post('/admin/course/add', [AdminController::class, 'addCourse']);
-$app->router->post('/admin/course/remove', [AdminController::class, 'removeCourse']);
-$app->router->post('/admin/course/update', [AdminController::class, 'updateCourse']);
-$app->router->post('/admin/users/add', [AdminController::class, 'addUser']);
-$app->router->post('/admin/users/remove', [AdminController::class, 'removeUser']);
-$app->router->post('/admin/users/update', [AdminController::class, 'updateUser']);
 $app->router->post('/admin/course/approve', [AdminController::class, 'approveRequest']);
 $app->router->post('/admin/course/deny', [AdminController::class, 'denyRequest']);
 
@@ -103,8 +100,5 @@ $app->router->post('/forum/add', [ForumController::class, 'addForum']);
 
 $app->router->get('/post', [PostController::class, 'view']);
 $app->router->post('/post/add', [PostController::class, 'addPost']);
-
-
-$app->router->get('/publications', [PublicationController::class, 'view']);
 
 $app->run();

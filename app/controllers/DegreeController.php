@@ -3,12 +3,11 @@
 namespace App\controllers;
 
 use App\Core\Application;
+use App\core\Exceptions\NotFoundException;
 use App\Core\Session;
 use App\Core\Request;
-use App\Models\MVCModels\Degrees;
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Degree;
 use App\Middleware\AuthenticationMiddleware;
+use App\models\Degrees;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -21,7 +20,8 @@ class DegreeController extends Controller
 
     public function __construct()
     {
-        $this->setMiddlewares(new AuthenticationMiddleware(['view', 'uploadDegree', 'deleteDegree', 'updateDegree', 'getdegrees']));
+        $this->setMiddlewares(new AuthenticationMiddleware(
+            ['view', 'uploadDegree', 'deleteDegree', 'updateDegree', 'getdegrees']));
 
         $this->degrees = new Degrees();
     }
@@ -38,47 +38,26 @@ class DegreeController extends Controller
     /**
      * This method shows the update degree page.
      * @return string
+     * @throws NotFoundException
      */
     public function update(): string
     {
-        $ID = $_GET["ID"] ?? $this->display('degrees/update', 'degrees', []);
+        if (isset($_GET["ID"])) {
+            $ID = $_GET["ID"];
+            if (!empty($ID)) {
 
-        $params = [
-            'degreeID' => $ID
-        ];
+                if (!$this->degrees->getDegree($ID)) {
+                    return throw new NotFoundException();
+                }
 
-        return $this->display('degrees/update', 'degrees', $params);
-    }
+                $params = [
+                    'degreeID' => $ID
+                ];
 
-    /**
-     * This method handles uploading a degree to a user.
-     * @param Request $request
-     */
-    public function uploadDegree(Request $request)
-    {
-        $body = $request->getBody();
-        $userID = Session::get(SESSION_USERID);
-
-        $params = [
-            "name" => $body["name"],
-            "field_of_study" => $body["field_of_study"],
-            "start_date" => $body["start_date"],
-            "end_date" => $body["end_date"],
-            "country" => $body["country"],
-            "city" => $body["city"],
-            "university" => $body["university"],
-        ];
-
-        $errors = $this->degrees->validate($params);
-
-        if (count($errors) > 0) {
-            $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/profile?ID=$userID&$errorList");
-            exit();
+                return $this->display('degrees/update', 'degrees', $params);
+            }
         }
-
-        $this->degrees->uploadDegree($params, Session::get(SESSION_USERID));
-        Application::$app->redirect("/UniShare/profile?ID=$userID");
+        return throw new NotFoundException();
     }
 
     /**
@@ -119,42 +98,75 @@ class DegreeController extends Controller
     }
 
     /**
+     * This method handles uploading a degree to a user.
+     * @param Request $request
+     */
+    public function uploadDegree(Request $request)
+    {
+        $body = $request->getBody();
+        $userID = Session::get(SESSION_USERID);
+
+        $errors = $this->validateUpload($request);
+
+        if (count($errors) > 0) {
+            $errorList = http_build_query(array('error' => $errors));
+            Application::$app->redirect("/9.0/degree/new?$errorList");
+            exit();
+        }
+
+        $this->degrees->uploadDegree($body, Session::get(SESSION_USERID));
+        Application::$app->redirect("/9.0/profile?ID=$userID");
+    }
+
+
+    /**
      * This method updates a specific degree from ID from the logged in user.
      * @param Request $request
      */
     #[NoReturn] public function updateDegree(Request $request)
     {
         $body = $request->getBody();
-        $degreeID = $body["degree"];
-
-        $params = [
-            'name' => $body["name"],
-            'field_of_study' => $body["field_of_study"],
-            'start_date' => $body["start_date"],
-            'end_date' => $body["end_date"],
-            'country' => $body["country"],
-            'city' => $body["city"],
-            'university' => $body["university"],
-        ];
-
+        $degreeID = $body["degreeID"];
         $userID = Session::get(SESSION_USERID);
 
-        $errors = $this->degrees->validate($params);
+        $errors = $this->validateUpload($request);
 
         if (count($errors) > 0) {
             $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/degree/update?ID=$degreeID&$errorList");
+            Application::$app->redirect("/9.0/degree/update?ID=$degreeID&$errorList");
             exit();
         }
 
         $canUpdate = $this->degrees->checkIfUserOwner($userID, $degreeID);
 
         if ($canUpdate) {
-            $this->degrees->updateDegree($body, $userID);
-            Application::$app->redirect("/UniShare/profile?ID=$userID");
+            $this->degrees->updateDegree($body, $userID, $degreeID);
+            Application::$app->redirect("/9.0/profile?ID=$userID");
         } else {
-            Application::$app->redirect("/UniShare/");
+            Application::$app->redirect("/9.0/");
         }
+    }
+
+    /**
+     * Validate the uploaded fields.
+     * @param Request $request
+     * @return array
+     */
+    private function validateUpload(Request $request): array
+    {
+        $body = $request->getBody();
+
+        $params = [
+            "name" => $body["name"],
+            "field_of_study" => $body["field_of_study"],
+            "start_date" => $body["start_date"],
+            "end_date" => $body["end_date"],
+            "country" => $body["country"],
+            "city" => $body["city"],
+            "university" => $body["university"],
+        ];
+
+        return $this->degrees->validate($params);
     }
 
     /**
@@ -162,7 +174,7 @@ class DegreeController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function deleteDegree(Request $request)
+    public function deleteDegree(Request $request): bool|string
     {
         $body = $request->getBody();
         $degreeID = $body['degreeID'];

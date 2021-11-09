@@ -1,6 +1,8 @@
 nav{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 5%;
   background-color:#423F3E;
   align-items: center;
   min-height: 5vh;
@@ -8,57 +10,58 @@ nav{
 
 #header2{
   display: flex;
-  justify-content: left;
-  background-color: #3e576b;
+  justify-content: space-between;
+  background-color: #182956;
+  padding-left: 50px;
+  padding-right: 5%;
   align-items: center;
-  height: auto;
+  min-height: 5vh;
 }
 
 #adminHeader{
   display: flex;
-  justify-content: left;
   background-color: #57b4ff;
-  align-items: center;
-
-  height: auto;
+  padding-left: 2%;
+  justify-content: left;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  text-decoration: none;
 }
 
 .logo{
   color: rgb(226, 226, 226);
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: 6px;
   font-size: 15px;
+  text-decoration: none;
 }
 
 .nav-links{
   display: flex;
-  justify-content: space-around;
-  width: 40%;
 }
 
 .nav-links li{
+  padding: 5%;
+  white-space: nowrap;
   list-style: none;
 }
 
 .nav-links a{
   color: rgb(226, 226, 226);
   text-decoration: none;
-  letter-spacing: 2px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .nav-links a:hover{
   color: #5a6359;
 }
 
-@media screen and (max-width: 1250px){
-  .nav-links{
-    width: 60%;
-  }
-}
-
 @media screen and (max-width: 768px){
+  #header2{
+    padding: 0;
+  }
+
   nav{
     flex-direction: column;
   }
@@ -76,11 +79,16 @@ nav{
     float: none;
     text-align: center;
     justify-content: center;
+    margin-bottom: 10px;
   }
 
   .nav-links{
     padding: 20px;
     text-align: center;
     display:grid;
+  }
+
+  .nav-links li{
+    margin: 0;
   }
 }

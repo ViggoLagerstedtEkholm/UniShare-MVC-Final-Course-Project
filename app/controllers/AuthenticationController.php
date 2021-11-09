@@ -4,9 +4,9 @@ namespace App\controllers;
 
 use App\Core\Application;
 use App\Core\Request;
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Register;
-use App\Models\MVCModels\Login;
+use App\Models\Users;
+use App\Models\Register;
+use App\Models\Login;
 use App\Middleware\AuthenticationMiddleware;
 use App\Core\Session;
 
@@ -66,6 +66,17 @@ class AuthenticationController extends Controller
     }
 
     /**
+     * Get login status.
+     * @return bool|string
+     */
+    public function isLoggedIn(): bool|string
+    {
+        $isLoggedIn = Session::isLoggedIn();
+        $resp = ['success' => true, 'data' => ['LoggedIn' => $isLoggedIn]];
+        return $this->jsonResponse($resp, 200);
+    }
+
+    /**
      * This method handles logging in a user.
      * @param Request $request
      */
@@ -78,14 +89,6 @@ class AuthenticationController extends Controller
             'password' => $body["password"],
             'rememberMe' => $body['rememberMe']
         ];
-
-        $errors = $this->login->validate($params);
-
-        if (count($errors) > 0) {
-            $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("./login?$errorList");
-            exit();
-        }
 
         $success = $this->login->login($params);
 

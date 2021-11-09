@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: "/UniShare/settings/getsettings",
+        url: "/9.0/settings/getsettings",
         type: 'GET',
         dataType: "json",
         success: function (res) {
@@ -19,7 +19,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: "/UniShare/degree/get/names",
+        url: "/9.0/degree/get/names",
         type: 'GET',
         dataType: "json",
         success: function (res) {

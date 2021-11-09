@@ -1,10 +1,12 @@
 <?php
 namespace App\controllers;
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Courses;
-use App\Models\MVCModels\Forums;
+
+use App\Models\Users;
+use App\Models\Courses;
+use App\Models\Forums;
 use App\Core\Request;
 use App\Core\Session;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * Content controller for handling searching and filtering website content.
@@ -27,6 +29,7 @@ class ContentController extends Controller
    * Get the GET parameters used for filtering and pagination.
    * @return array
    */
+  #[ArrayShape(['search' => "mixed|null", 'filterOption' => "mixed|null", 'filterOrder' => "mixed|null", 'page' => "int|mixed", 'results_per_page_count' => "int|mixed|null"])]
   private function getFilters(): array
   {
     if(isset($_GET["search"])){
@@ -216,7 +219,8 @@ class ContentController extends Controller
      * @param Request $request
      * @return false|string
      */
-  public function toggleCourseToDegree(Request $request){
+  public function toggleCourseToDegree(Request $request): bool|string
+  {
     $body = $request->getBody();
     $user = $this->users->getUser(Session::get(SESSION_USERID));
 

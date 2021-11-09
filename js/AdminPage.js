@@ -4,7 +4,7 @@ window.onload = function () {
 }
 
 function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
+    let i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("profile-tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
@@ -19,7 +19,7 @@ function openTab(evt, tabName) {
 
 function denyRequest(ID) {
     $.ajax({
-        url: "/UniShare/admin/course/deny",
+        url: "/9.0/admin/course/deny",
         type: "POST",
         data: {requestID: ID},
         dataType: "json",
@@ -40,7 +40,7 @@ function denyRequest(ID) {
 
 function approveRequest(ID) {
     $.ajax({
-        url: "/UniShare/admin/course/approve",
+        url: "/9.0/admin/course/approve",
         type: "POST",
         data: {requestID: ID},
         dataType: "json",

@@ -4,14 +4,15 @@ namespace App\controllers;
 
 use App\Core\Application;
 use App\Core\Exceptions\GDResizeException;
+use App\core\Exceptions\NotFoundException;
 use App\Core\Request;
 use App\Core\Session;
 use App\Core\ImageHandler;
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Projects;
-use App\Models\MVCModels\Degrees;
-use App\Models\MVCModels\Comments;
-use App\Includes\Validate;
+use App\includes\ImageValidator;
+use App\Models\Users;
+use App\Models\Projects;
+use App\Models\Degrees;
+use App\Models\Comments;
 use App\Middleware\AuthenticationMiddleware;
 
 /**
@@ -28,7 +29,7 @@ class ProfileController extends Controller
 
     public function __construct()
     {
-        $this->setMiddlewares(new AuthenticationMiddleware(['uploadImage', 'uploadProject', 'deleteProject', 'pubishCourse', 'getDegrees', 'removeCourseFromDegree', 'addComment']));
+        $this->setMiddlewares(new AuthenticationMiddleware(['uploadImage', 'removeCourseFromDegree', 'addComment']));
 
         $this->imageHandler = new ImageHandler();
         $this->users = new Users();
@@ -40,12 +41,17 @@ class ProfileController extends Controller
     /**
      * This method shows the profile page.
      * @return string
+     * @throws NotFoundException
      */
     public function view(): string
     {
         if (isset($_GET["ID"])) {
             $ID = $_GET["ID"];
             if (!empty($ID)) {
+
+                if(!$this->users->getUser($ID)){
+                    return throw new NotFoundException();
+                }
 
                 if (isset($_GET['page'])) {
                     $page = $_GET['page'];
@@ -61,6 +67,7 @@ class ProfileController extends Controller
                 $number_of_pages = $offsets['number_of_pages'];
 
                 $comments = $this->comments->getComments($start_page_first_result, $results_per_page, $ID);
+
 
                 $user = $this->users->getUser($ID);
                 $image = base64_encode($user["userImage"]);
@@ -96,10 +103,11 @@ class ProfileController extends Controller
                     'joined' => $user["joined"]
                 ];
 
+
                 return $this->display('profile', 'profile', $params);
             }
         }
-        Application::$app->redirect("./");
+        return throw new NotFoundException();
     }
 
     /**
@@ -111,19 +119,27 @@ class ProfileController extends Controller
         $fileUploadName = 'file';
         $sessionID = Session::get(SESSION_USERID);
 
-        $isValid = Validate::hasValidUpload($fileUploadName);
-
-        if ($isValid) {
-            $originalImage = $_FILES[$fileUploadName];
-            $image_resize = $this->imageHandler->handleUploadResizing($originalImage);
-            $this->users->uploadImage($image_resize, $sessionID);
-            Application::$app->redirect("../../profile?ID=$sessionID");
+        if (ImageValidator::hasValidUpload($fileUploadName))
+        {
+            if (ImageValidator::hasValidImageExtension($fileUploadName))
+            {
+                $originalImage = $_FILES[$fileUploadName];
+                $image_resize = $this->imageHandler->handleUploadResizing($originalImage);
+                $this->users->uploadImage($image_resize, $sessionID);
+                Application::$app->redirect("../../profile?ID=$sessionID");
+            }
         } else {
+
             Application::$app->redirect("../../profile?ID=$sessionID&error=" . INVALID_UPLOAD);
         }
     }
 
-    public function deleteComment(Request $request)
+    /**
+     * Delete comment.
+     * @param Request $request
+     * @return false|string
+     */
+    public function deleteComment(Request $request): bool|string
     {
         $body = $request->getBody();
         $commentID = $body['commentID'];
@@ -140,21 +156,14 @@ class ProfileController extends Controller
         }
     }
 
-    public function addComment(Request $request)
+    /**
+     * Add comment.
+     * @param Request $request
+     * @return false|string
+     */
+    public function addComment(Request $request): bool|string
     {
         $body = $request->getBody();
-
-        $params = [
-            'pageID' => $body['pageID'],
-            'text' => $body['text'],
-        ];
-
-        $errors = $this->comments->validate($params);
-
-        if (count($errors) > 0) {
-            $resp = ['success' => false, 'data' => ['Status' => 'Invalid comment']];
-            return $this->jsonResponse($resp, 500);
-        }
 
         $posterID = Session::get(SESSION_USERID);
         $text = $body['text'];
@@ -170,7 +179,12 @@ class ProfileController extends Controller
         }
     }
 
-    public function removeCourseFromDegree(Request $request)
+    /**
+     * Remove course from degree.
+     * @param Request $request
+     * @return false|string
+     */
+    public function removeCourseFromDegree(Request $request): bool|string
     {
         $courseRequest = $request->getBody();
 

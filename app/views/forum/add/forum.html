@@ -1,29 +1,98 @@
-<div class="container">
-   <div class="content-container">
-     <div class="flex-item">
-       <div class="user-input-form-box">
-         <form method="POST" action="/UniShare/forum/add">
-           <h1>Create forum post</h1>
-           <h4>
-             Title
-           </h4>
-           <input class="user-input-text" type="text" name="title" placeholder="Title">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniShare</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <link rel="stylesheet" href="/9.0/css/style.css">
+    <link rel="stylesheet" href="/9.0/css/header.css">
+    <link rel="stylesheet" href="/9.0/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
 
-           <h4>
-             Topic
-           </h4>
-           <input class="user-input-text" type="text" name="topic" placeholder="Topic">
-
-           <h4>
-             Text - (ATLEAST 200 characters)
-           </h4>
-           <input class="user-input-text" type="text" name="text" placeholder="Text">
-
-           <p>
-             <input class="button-style-1" type="submit" name="submit_project" value="Add forum">
-           </p>
-         </form>
-      </div>
+<nav>
+    <div class="logo">
+        <h4>UniShare</h4>
     </div>
-  </div>
+    <ul class="nav-links">
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/profile?ID=---ID---'>Profile</a></li>
+        <li><a href='/9.0/logout'>Logout</a></li>
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/login'>Login</a></li>
+        <li><a href='/9.0/register'>Register</a></li>
+        <!--===edit===-->
+    </ul>
+</nav>
+<div id="header2">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/search/people'>People</a>
+        </li>
+        <li>
+            <a href='/9.0/search/courses'>Courses</a>
+        </li>
+        <li>
+            <a href='/9.0/search/forums'>Forum</a>
+        </li>
+    </ul>
 </div>
+
+<!--===edit===-->
+<div id="adminHeader">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/admin'>Administer website content</a>
+        </li>
+    </ul>
+</div>
+<!--===edit===-->
+
+<div class="container">
+    <h2>Add forum</h2>
+    <hr/>
+    <div class="user-input-form-box">
+        <form method="POST" action="/9.0/forum/add">
+            <h1>Create forum post</h1>
+            <h4>
+                Title
+            </h4>
+            <h4>Between 5 and 50 characters allowed.</h4>
+            <input class="user-input-text" type="text" name="title" placeholder="Title">
+
+            <h4>
+                Topic
+            </h4>
+            <h4>Between 1 and 50 characters allowed</h4>
+            <input class="user-input-text" type="text" name="topic" placeholder="Topic">
+
+            <h4>
+                Text
+            </h4>
+            <h4>Between 5 and 500 characters allowed</h4>
+            <input class="user-input-text" type="text" name="text" placeholder="Text">
+
+            <p>
+                <input class="button-style-1" type="submit" name="submit_project" value="Add forum">
+            </p>
+        </form>
+    </div>
+</div>
+<ul class="footer footer-content">
+    <li class="footer-links">
+        <h1>About</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Project on github</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Contact us</h1>
+    </li>
+</ul>
+</body>
+</html>

@@ -3,7 +3,7 @@
 namespace App\controllers;
 
 use App\Core\Request;
-use App\Models\MVCModels\Requests;
+use App\Models\Requests;
 use App\Core\Session;
 use App\Middleware\AuthenticationMiddleware;
 use App\Core\Application;
@@ -49,7 +49,6 @@ class RequestController extends Controller
         $params = [
             "name" => $courseRequest["name"],
             "credits" => $courseRequest["credits"],
-            "duration" => $courseRequest["duration"],
             "country" => $courseRequest["country"],
             "city" => $courseRequest["city"],
             "university" => $courseRequest["university"],
@@ -63,15 +62,9 @@ class RequestController extends Controller
             Application::$app->redirect("../request?$query");
 
         } else {
-            $success = $this->requests->insertRequestedCourse($params, Session::get(SESSION_USERID));
+            $this->requests->insertRequestedCourse($params, Session::get(SESSION_USERID));
             Application::$app->redirect("../request?error=none");
         }
-    }
-
-    //TODO
-    public function updateRequest(Request $request)
-    {
-        //TODO
     }
 
     /**

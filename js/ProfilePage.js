@@ -1,7 +1,6 @@
 window.onload = function () {
     let projectButton = document.getElementById("projectTab");
     let degreeButton = document.getElementById("degreeTab");
-    let publicationButton = document.getElementById("publicationTab");
 
     projectButton.addEventListener('click', function (event) {
         openTab(event, 'Projects');
@@ -9,10 +8,6 @@ window.onload = function () {
 
     degreeButton.addEventListener('click', function (event) {
         openTab(event, 'Degrees');
-    });
-
-    publicationButton.addEventListener('click', function (event) {
-        openTab(event, 'Publications');
     });
 
     //Go to projects tab by default.
@@ -79,7 +74,7 @@ function deleteCourseInDegree(degreeID, courseID) {
 
 function deleteDegree(ID) {
     $.ajax({
-        url: "/UniShare/degree/remove",
+        url: "/9.0/degree/remove",
         type: "POST",
         data: {degreeID: ID},
         dataType: "json",
@@ -99,7 +94,7 @@ function deleteDegree(ID) {
 
 function deleteProject(ID) {
     $.ajax({
-        url: "/UniShare/project/delete",
+        url: "/9.0/project/delete",
         type: "POST",
         data: {projectID: ID},
         dataType: "json",

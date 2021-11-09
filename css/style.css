@@ -1,8 +1,8 @@
 html,body {
   width: 100%;
   height: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
 }
 
@@ -35,6 +35,11 @@ li{
   list-style-type: none;
 }
 
+.button-without-form{
+  display: block;
+  margin-top: 0;
+}
+
 .content-card-forum{
   display: flex;
   font-size: 15px;
@@ -62,7 +67,6 @@ li{
 .column {
   display: flex;
   flex-direction: column;
-  flex-basis: 100%;
   padding: 10px;
   flex: 1;
   align-items: center;
@@ -133,9 +137,8 @@ justify-content: center;
 }
 
 .degree-box{
-  margin-top: 10px;
+  margin-top: 5px;
   background: linear-gradient(178deg, rgb(32 37 40) 0%, rgb(12 9 21) 100%);
-  margin-top: 20px;
   border-radius: 5px;
   padding: 10px;
   color: white;
@@ -323,76 +326,48 @@ select {
 
 
 /*BUTTON STYLES */
-.button-style-1 {
-  background-color: #4008cc;
-  border: none;
+.button-style-1,
+.button-style-2,
+.button-style-3,
+.button-style-4,
+.button-style-5 {
   color: white;
-  padding: 16px 32px;
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   width: 100%;
   cursor: pointer;
-  border:none;
-  border-radius: 5px;
+  border: none;
+}
+
+/*BUTTON STYLES */
+.button-style-1 {
+  background-color: #0051c9;
 }
 
 .button-style-2 {
-  background-color: #c72a44;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 100%;
-  cursor: pointer;
-  border:none;
-  border-radius: 5px;
+  background-color: #8c132f;
 }
 
 .button-style-3 {
-  background-color: #0e8c2f;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 80%;
-  cursor: pointer;
-  border:none;
-  border-radius: 5px;
+  background-color: #127303;
 }
 
 .button-style-4 {
   background-color: #5c7df7;
-  color: white;
-  padding: 16px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 100%;
-  cursor: pointer;
-  border:none;
 }
 
 .button-style-5 {
   background-color: gray;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 100%;
-  cursor: pointer;
-  border:none;
 }
 
-.button-style-1:hover{
-  background-color: #1e045e;
+.button-style-1:hover {
+  background-color: #4311c5;
   color: white;
 }
 
@@ -406,13 +381,13 @@ select {
   color: white;
 }
 
-.button-style-4:hover{
-  background-color: #263b87;
+.button-style-4:hover {
+  background-color: #3d5ec9;
   color: white;
 }
 
-.button-style-5:hover{
-  background-color: #165e7d;
+.button-style-5:hover {
+  background-color: #242828;
   color: white;
 }
 
@@ -474,11 +449,13 @@ form .text_field{
 
 .container{
   background-color: #1F1F1F;
-  padding-top: 20px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-bottom: 20px;
+  padding: 20px 50px;
   min-height: 100%;
+}
+
+.container h2{
+  color: white;
+  margin: 0;
 }
 
 .content-container{
@@ -762,7 +739,6 @@ form .text_field{
 }
 
 .content-card-body{
-  padding-right: 20px;
   margin-top: 5px;
   padding: 5px;
 }

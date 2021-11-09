@@ -2,9 +2,9 @@
 
 namespace App\controllers;
 
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Courses;
-use App\Models\MVCModels\Forums;
+use App\Models\Users;
+use App\Models\Courses;
+use App\Models\Forums;
 use App\Core\Session;
 
 /**

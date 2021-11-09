@@ -16,7 +16,7 @@ class Request
      */
     public function getPath(): string
     {
-        $path = str_replace("UniShare/", "", $_SERVER['REQUEST_URI']);
+        $path = str_replace("9.0/", "", $_SERVER['REQUEST_URI']);
         $position = strpos($path, '?');
         if ($position === false) {
             return $path;

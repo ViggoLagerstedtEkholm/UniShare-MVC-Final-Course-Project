@@ -2,8 +2,10 @@
 
 namespace App\controllers;
 
+use App\core\Exceptions\NotFoundException;
 use App\Middleware\AuthenticationMiddleware;
-use App\Models\MVCModels\Reviews;
+use App\models\Courses;
+use App\Models\Reviews;
 use App\Core\Session;
 use App\Core\Request;
 use App\Core\Application;
@@ -15,21 +17,36 @@ use App\Core\Application;
 class ReviewController extends Controller
 {
     private Reviews $reviews;
+    private Courses $courses;
 
     function __construct()
     {
         $this->setMiddlewares(new AuthenticationMiddleware(['setRate', 'getRate', 'uploadReview', 'deleteReview']));
 
         $this->reviews = new Reviews();
+        $this->courses = new Courses();
     }
 
     /**
      * This method shows the review course page.
      * @return string
+     * @throws NotFoundException
      */
     public function review(): string
     {
-        return $this->display('review', 'review', []);
+        if (isset($_GET["ID"])) {
+            $ID = $_GET["ID"];
+            if (!empty($ID)) {
+
+                if (!$this->courses->getCourse($ID)) {
+                    return throw new NotFoundException();
+                }
+
+                return $this->display('review', 'review', []);
+
+            }
+        }
+        return throw new NotFoundException();
     }
 
     /**
@@ -37,7 +54,7 @@ class ReviewController extends Controller
      * @param Request $request
      * @return false|string
      */
-    public function getReview(Request $request)
+    public function getReview(Request $request): bool|string
     {
         $body = $request->getBody();
         $courseID = $body['courseID'];
@@ -61,16 +78,15 @@ class ReviewController extends Controller
 
         if ($userID == Session::get(SESSION_USERID)) {
             $this->reviews->deleteReview($userID, $courseID);
-            Application::$app->redirect("/UniShare/courses?ID=$courseID");
+            Application::$app->redirect("/9.0/courses?ID=$courseID");
         } else {
-            Application::$app->redirect("/UniShare/courses?ID=$courseID&error=failedremove");
+            Application::$app->redirect("/9.0/courses?ID=$courseID&error=failedremove");
         }
     }
 
     /**
      * This method handles uploading reviews.
      * @param Request $request
-     * @return false|string
      */
     public function uploadReview(Request $request)
     {
@@ -82,29 +98,26 @@ class ReviewController extends Controller
             "environment" => $body["environment"],
             "difficulty" => $body["difficulty"],
             "grading" => $body["grading"],
-            "litterature" => $body["litterature"],
+            "literature" => $body["litterature"],
             "overall" => $body["overall"],
             "text" => $body["text"],
         ];
 
         $errors = $this->reviews->validate($params);
-
         $courseID = $params['courseID'];
+
         if (count($errors) > 0) {
             $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/review?ID=$courseID&$errorList");
+            Application::$app->redirect("/9.0/review?ID=$courseID&$errorList");
             exit();
         }
 
         $success = $this->reviews->insertReview($params);
 
-        if ($success) {
-            Application::$app->redirect("/UniShare/courses?ID=$courseID");
-            exit();
-        } else {
-            //TODO check if this is necessary.
-            $resp = ['success' => false, 'data' => ['Status' => 'Failed upload review']];
-            return $this->jsonResponse($resp, 500);
+        if($success){
+            Application::$app->redirect("/9.0/courses?ID=$courseID");
+        }else{
+            Application::$app->redirect("/9.0/");
         }
     }
 }

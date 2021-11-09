@@ -1,75 +1,143 @@
-<div class="container">
-  <div class="content-container">
-    <div class="startpage-flex-item">
-      <h4>Title: ---title---</h4>
-      <h4>Created: ---created---</h4>
-      <h4>Views: ---views---</h4>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniShare</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <link rel="stylesheet" href="/9.0/css/style.css">
+    <link rel="stylesheet" href="/9.0/css/header.css">
+    <link rel="stylesheet" href="/9.0/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
 
-      <div class="display-result-box filter-background-box">
-        <p class="txt-small">
-          Total page count: ---page-count---
-        </p>
-
-        <p class="txt-small">
-          Page index: ---page---
-        </p>
-
-        <p class="txt-small">
-          Range: ---range---
-        </p>
-
-        <form method="get" action="/UniShare/post">
-          <input name="ID" value="---ID---" hidden />
-          <input class="button-style-4" type="submit" value="Add forum post">
-        </form>
-
-        <!--===edit===-->
-        <div class="review">
-          <div class="comment-image">
-            <img src="---userImage---" alt="USER IMG">
-          </div>
-
-          <br />
-
-          <p>
-            Username: ---userDisplayName---
-            Posted: ---posted---
-          </p>
-
-          <div class="review-border">
-            <div class="review-text">
-              ---text---
-            </div>
-          </div>
-        </div>
-        <!--===edit===-->
-      </div>
+<nav>
+    <div class="logo">
+        <h4>UniShare</h4>
     </div>
-  </div>
-  <div class="content-pagination">
-      <div class="content-pagination-bar">
+    <ul class="nav-links">
         <!--===edit===-->
-        <div>
-          <form action="/UniShare/forum" method="GET">
-            <input type="hidden" name="ID" value="---ID---" />
-            <input type="hidden" name="page" value="---page---" />
-            <button type="submit" class="pagination-button">🡸</button>
-          </form>
-        </div>
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/profile?ID=---ID---'>Profile</a></li>
+        <li><a href='/9.0/logout'>Logout</a></li>
         <!--===edit===-->
-        <div>
-          <form action="/UniShare/forum" method="GET">
-            <input type="hidden" name="ID" value="---ID---" />
-            <input type="hidden" name="page" value="---page---" />
-            <button type="submit" class="pagination-button">🡺</button>
-          </form>
-        </div>
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/login'>Login</a></li>
+        <li><a href='/9.0/register'>Register</a></li>
         <!--===edit===-->
-    </div>
-    <form method="get">
-        <input name="ID" value="---ID---" type="hidden" />
-        <input class="user-input-text" type="number" name="page"  placeholder="PAGE INDEX" required>
-        <input class="button-style-4" type="submit" name="submit" value="Go to page">
-    </form>
-  </div>
+    </ul>
+</nav>
+<div id="header2">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/search/people'>People</a>
+        </li>
+        <li>
+            <a href='/9.0/search/courses'>Courses</a>
+        </li>
+        <li>
+            <a href='/9.0/search/forums'>Forum</a>
+        </li>
+    </ul>
 </div>
+
+<!--===edit===-->
+<div id="adminHeader">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/admin'>Administer website content</a>
+        </li>
+    </ul>
+</div>
+<!--===edit===-->
+
+<div class="container">
+    <div class="content-container">
+        <div class="startpage-flex-item">
+            <h4>Title: ---title---</h4>
+            <h4>Created: ---created---</h4>
+            <h4>Views: ---views---</h4>
+
+            <div class="display-result-box filter-background-box">
+                <p class="txt-small">
+                    Total page count: ---page-count---
+                </p>
+
+                <p class="txt-small">
+                    Page index: ---page---
+                </p>
+
+                <p class="txt-small">
+                    Range: ---range---
+                </p>
+
+                <form method="get" action="/9.0/post">
+                    <input name="ID" value="---ID---" hidden/>
+                    <input class="button-style-4" type="submit" value="Add forum post">
+                </form>
+
+                <!--===edit===-->
+                <div class="review">
+                    <div class="comment-image">
+                        <img src="---userImage---" alt="USER IMG">
+                    </div>
+
+                    <br/>
+
+                    <p>
+                        Username: ---userDisplayName---
+                        Posted: ---posted---
+                    </p>
+
+                    <div class="review-border">
+                        <div class="review-text">
+                            ---text---
+                        </div>
+                    </div>
+                </div>
+                <!--===edit===-->
+            </div>
+        </div>
+    </div>
+    <div class="content-pagination">
+        <div class="content-pagination-bar">
+            <!--===edit===-->
+            <div>
+                <form action="/9.0/forum" method="GET">
+                    <input type="hidden" name="ID" value="---ID---"/>
+                    <input type="hidden" name="page" value="---page---"/>
+                    <button type="submit" class="pagination-button">🡸</button>
+                </form>
+            </div>
+            <!--===edit===-->
+            <div>
+                <form action="/9.0/forum" method="GET">
+                    <input type="hidden" name="ID" value="---ID---"/>
+                    <input type="hidden" name="page" value="---page---"/>
+                    <button type="submit" class="pagination-button">🡺</button>
+                </form>
+            </div>
+            <!--===edit===-->
+        </div>
+        <form method="get">
+            <input name="ID" value="---ID---" type="hidden"/>
+            <input class="user-input-text" type="number" name="page" placeholder="PAGE INDEX" required>
+            <input class="button-style-4" type="submit" name="submit" value="Go to page">
+        </form>
+    </div>
+</div>
+<ul class="footer footer-content">
+    <li class="footer-links">
+        <h1>About</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Project on github</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Contact us</h1>
+    </li>
+</ul>
+</body>
+</html>

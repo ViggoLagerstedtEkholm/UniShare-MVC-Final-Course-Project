@@ -1,111 +1,182 @@
-    <div class="container">
-      <div class="content-container">
-        <div class="startpage-flex-item">
-          <!--===edit===-->
-          <h1>Your profile</h1>
-            <div class="startpage-display-user">
-              <div class="content-card-body">
-                <div class="content-user">
-                  <div class="content-card-image">
-                    <img src="---SRC---" alt="USER IMAGE">
-                  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniShare</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <link rel="stylesheet" href="/9.0/css/style.css">
+    <link rel="stylesheet" href="/9.0/css/header.css">
+    <link rel="stylesheet" href="/9.0/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
 
-                  <span class="vertical-line"></span>
-
-                  <div class="content-card-info">
-                    <h4><b>Personal information</b></h4>
-                    <p><b>First name:</b> ---first_name---</p>
-                    <p><b>Last name:</b> ---last_name---</p>
-                    <p><b>Email: </b>---email---</p>
-                  </div>
-
-                  <span class="vertical-line"></span>
-
-                  <div class="content-card-info">
-                    <h4><b>Profile information</b></h4>
-                    <p><b>Visits:</b> ---visits---</p>
-                    <p><b>Last online:</b> ---last_online---</p>
-                  </div>
-                  <span class="vertical-line"></span>
-
-                  <div class="content-card-info-buttons">
-                    <form action="./profile" method="get">
-                      <input type="hidden" name="ID" value="---ID---" />
-                      <button class="button-style-4" type="submit">Profile</button>
-                      </form>
-                    </div>
-                  <span class="vertical-line"></span>
-                </div>
-              </div>
-            </div>
-          <!--===edit===-->
-
-          <hr />
-          <h1>Top ranked courses</h1>
-
-
-          <div class="display-result-box">
-
-            <!--===edit===-->
-            <p># TOP ---PLACEMENT---</p>
-            <div class="content-card-body">
-              <div class="content-user">
-                <div class="content-card-image">
-                  <img src="images/books.png" alt="USER IMAGE">
-                </div>
-
-                <div class="content-card-info">
-                  <h4><b>Course information</b></h4>
-                  <p><b>Name:</b> ---name---</p>
-                  <p><b>University: </b>---university---</p>
-                </div>
-
-                <div class="content-card-info">
-                  <p><b>Score:</b> ---score---</p>
-                </div>
-
-                <div class="content-card-info-buttons">
-                  <form action="/UniShare/courses" method="get">
-                    <input type="hidden" name="ID" value="---ID---" />
-                    <button class="button-style-1" type="submit">Visit</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <!--===edit===-->
-          </div>
-
-          <h1>Trending discussions</h1>
-          <div class="display-result-box">
-
-            <!--===edit===-->
-            <p># TOP ---PLACEMENT---</p>
-            <div class="content-card-body">
-              <div class="content-user">
-                <div class="content-card-image">
-                  <img src="images/books.png" alt="USER IMAGE">
-                </div>
-
-                <div class="content-card-info">
-                  <h4><b>Course information</b></h4>
-                  <p><b>Name:</b> ---title---</p>
-                  <p><b>Created: </b>---created---</p>
-                </div>
-
-                <div class="content-card-info">
-                  <p><b>Views:</b> ---views---</p>
-                </div>
-
-                <div class="content-card-info-buttons">
-                  <form action="/UniShare/forum" method="get">
-                    <input type="hidden" name="ID" value="---ID---" />
-                    <button class="button-style-1" type="submit">Visit</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <!--===edit===-->
-          </div>
-        </div>
-      </div>
+<nav>
+    <div class="logo">
+        <h4>UniShare</h4>
     </div>
+    <ul class="nav-links">
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/profile?ID=---ID---'>Profile</a></li>
+        <li><a href='/9.0/logout'>Logout</a></li>
+        <!--===edit===-->
+        <li><a href='/9.0/'>Home</a></li>
+        <li><a href='/9.0/login'>Login</a></li>
+        <li><a href='/9.0/register'>Register</a></li>
+        <!--===edit===-->
+    </ul>
+</nav>
+<div id="header2">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/search/people'>People</a>
+        </li>
+        <li>
+            <a href='/9.0/search/courses'>Courses</a>
+        </li>
+        <li>
+            <a href='/9.0/search/forums'>Forum</a>
+        </li>
+    </ul>
+</div>
+
+<!--===edit===-->
+<div id="adminHeader">
+    <ul class="nav-links">
+        <li>
+            <a href='/9.0/admin'>Administer website content</a>
+        </li>
+    </ul>
+</div>
+<!--===edit===-->
+
+<div class="container">
+    <div class="content-container">
+        <div class="startpage-flex-item">
+            <!--===edit===-->
+            <h1>Your profile</h1>
+            <div class="startpage-display-user">
+                <div class="content-card-body">
+                    <div class="content-user">
+                        <div class="content-card-image">
+                            <img src="---SRC---" alt="USER IMAGE">
+                        </div>
+
+                        <span class="vertical-line"></span>
+
+                        <div class="content-card-info">
+                            <h4><b>Personal information</b></h4>
+                            <p><b>First name:</b> ---first_name---</p>
+                            <p><b>Last name:</b> ---last_name---</p>
+                            <p><b>Email: </b>---email---</p>
+                        </div>
+
+                        <span class="vertical-line"></span>
+
+                        <div class="content-card-info">
+                            <h4><b>Profile information</b></h4>
+                            <p><b>Visits:</b> ---visits---</p>
+                            <p><b>Last online:</b> ---last_online---</p>
+                        </div>
+                        <span class="vertical-line"></span>
+
+                        <div class="content-card-info-buttons">
+                            <form action="./profile" method="get">
+                                <input type="hidden" name="ID" value="---ID---"/>
+                                <button class="button-style-4" type="submit">Profile</button>
+                            </form>
+                        </div>
+                        <span class="vertical-line"></span>
+                    </div>
+                </div>
+            </div>
+            <!--===edit===-->
+
+            <hr/>
+            <h1>Top ranked courses</h1>
+
+
+            <div class="display-result-box">
+
+                <!--===edit===-->
+                <p># TOP ---PLACEMENT---</p>
+                <div class="content-card-body">
+                    <div class="content-user">
+                        <div class="content-card-image">
+                            <img src="images/books.png" alt="USER IMAGE">
+                        </div>
+
+                        <div class="content-card-info">
+                            <h4><b>Course information</b></h4>
+                            <p><b>Name:</b> ---name---</p>
+                            <p><b>University: </b>---university---</p>
+                        </div>
+
+                        <div class="content-card-info">
+                            <p><b>Score:</b> ---score---</p>
+                        </div>
+
+                        <div class="content-card-info-buttons">
+                            <form action="/9.0/courses" method="get">
+                                <input type="hidden" name="ID" value="---ID---"/>
+                                <button class="button-style-1" type="submit">Visit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--===edit===-->
+            </div>
+
+            <h1>Trending discussions</h1>
+            <div class="display-result-box">
+
+                <!--===edit===-->
+                <p># TOP ---PLACEMENT---</p>
+                <div class="content-card-body">
+                    <div class="content-user">
+                        <div class="content-card-image">
+                            <img src="images/books.png" alt="USER IMAGE">
+                        </div>
+
+                        <div class="content-card-info">
+                            <h4><b>Course information</b></h4>
+                            <p><b>Name:</b> ---title---</p>
+                            <p><b>Created: </b>---created---</p>
+                        </div>
+
+                        <div class="content-card-info">
+                            <p><b>Views:</b> ---views---</p>
+                        </div>
+
+                        <div class="content-card-info-buttons">
+                            <form action="/9.0/forum" method="get">
+                                <input type="hidden" name="ID" value="---ID---"/>
+                                <button class="button-style-1" type="submit">Visit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--===edit===-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="footer footer-content">
+    <li class="footer-links">
+        <h1>About</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Project on github</h1>
+    </li>
+    <li class="footer-links">
+        <h1>Contact us</h1>
+    </li>
+</ul>
+
+</body>
+</html>
+

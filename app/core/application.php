@@ -45,9 +45,13 @@ class Application
     {
         try {
             echo $this->router->resolve();
-        } catch (Exception $e) {
-            $this->response->setStatusCode(403);
-            echo $this->router->renderView('exceptions', 'unauthorized', [], ['isError' => true]);
+        }
+        catch (Exception $e) {
+            $this->response->setStatusCode($e->getCode());
+            $params = [
+              "exception" => $e
+            ];
+            echo $this->router->renderView('exceptions', 'exception', $params);
         }
     }
 
@@ -62,7 +66,7 @@ class Application
 
     /**
      * Get the controller.
-     * @return Controller controller object.
+     * @return Controller|null
      */
     public function getController(): ?Controller
     {

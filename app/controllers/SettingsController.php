@@ -2,13 +2,12 @@
 
 namespace App\controllers;
 
+use App\includes\UserValidation;
 use App\Middleware\AuthenticationMiddleware;
-use App\Models\MVCModels\Users;
-use App\Models\MVCModels\Degrees;
+use App\Models\Users;
 use App\Core\Session;
 use App\Core\Request;
 use App\Core\Application;
-use App\Includes\Validate;
 
 /**
  * Settings controller for handling user settings.
@@ -17,14 +16,12 @@ use App\Includes\Validate;
 class SettingsController extends Controller
 {
     private Users $users;
-    private Degrees $degrees;
 
     function __construct()
     {
         $this->setMiddlewares(new AuthenticationMiddleware(['view', 'deleteAccount', 'getSettings', 'update']));
 
         $this->users = new Users();
-        $this->degrees = new Degrees();
     }
 
     /**
@@ -42,8 +39,6 @@ class SettingsController extends Controller
      */
     public function update(Request $request)
     {
-        $fields = ["userFirstName", "userLastName", "userEmail", "userDisplayName", "usersPassword", "activeDegreeID", "description"];
-
         $updatedInfo = $request->getBody();
 
         $updated_first_name = $updatedInfo["first_name"];
@@ -56,7 +51,6 @@ class SettingsController extends Controller
         $updated_description = $updatedInfo["description"];
 
         $user = $this->users->getUser(Session::get(SESSION_USERID));
-        $ID = $user["usersID"];
         $first_name = $user["userFirstName"];
         $last_name = $user["userLastName"];
         $email = $user["userEmail"];
@@ -67,56 +61,70 @@ class SettingsController extends Controller
 
         $errors = array();
 
-        if (!$this->degrees->userHasDegreeID($updated_activeDegreeID)) {
-            $errors[] = INVALID_ACTIVEDEGREEID;
-        }
-
         if (!empty($updated_current_password) && !empty($updated_new_password)) {
             $comparePassword = password_verify($updated_current_password, $passwordHash);
 
             if ($comparePassword === false) {
                 $errors[] = INVALID_PASSWORD_MATCH;
             } else {
-                $hashPassword = password_hash($updated_new_password, PASSWORD_DEFAULT);
-                $this->users->updateUser($fields[4], $hashPassword, $ID);
+                $hashedNewPassword = password_hash($updated_new_password, PASSWORD_DEFAULT);
+                $this->users->updateUser("usersPassword", $hashedNewPassword, Session::get(SESSION_USERID));
             }
         }
 
-        if (Validate::invalidUsername($updated_display_name) === true) {
-            $errors[] = INVALID_USERNAME;
-        }
-        if (!is_null($this->users->userExists($fields[2], $updated_email)) && $updated_email != $email) {
+        //Check existing users information.
+        if ($updated_email !== $email && !is_null($this->users->userExists( "userEmail", $updated_email))) {
             $errors[] = EMAIL_TAKEN;
         }
-        if (!is_null($this->users->userExists($fields[3], $updated_email)) && $updated_display_name != $display_name) {
+        if ($updated_display_name !== $display_name && !is_null($this->users->userExists("userDisplayName", $updated_display_name))) {
+            $errors[] = USERNAME_TAKEN;
+        }
+
+        if (!UserValidation::validEmail($updated_email)) {
+            $errors[] = INVALID_EMAIL;
+        }
+        if (!UserValidation::validFirstname($updated_first_name)) {
+            $errors[] = INVALID_FIRST_NAME;
+        }
+        if (!UserValidation::validLastname($updated_last_name)) {
+            $errors[] = INVALID_LAST_NAME;
+        }
+        if (!UserValidation::validUsername($updated_display_name)) {
             $errors[] = INVALID_USERNAME;
+        }
+        if(!UserValidation::validDescription($description)){
+            $errors[] = INVALID_DESCRIPTION;
+        }
+        if(!UserValidation::validPassword($updated_new_password) && !empty($updated_new_password)){
+            $errors[] = INVALID_PASSWORD;
         }
 
         if (count($errors) > 0) {
             $errorList = http_build_query(array('error' => $errors));
-            Application::$app->redirect("/UniShare/settings?errors=$errorList");
+            Application::$app->redirect("/9.0/settings?$errorList");
             exit();
         }
 
-        if ($updated_description != $description) {
-            $this->users->updateUser($fields[6], $updated_description, $ID);
+        if ($updated_description != $description && !empty($updated_description)) {
+            $this->users->updateUser("description", $updated_description, Session::get(SESSION_USERID));
         }
-        if ($updated_activeDegreeID != $activeDegreeID) {
-            $this->users->updateUser($fields[5], $updated_activeDegreeID, $ID);
+        if ($updated_activeDegreeID != $activeDegreeID && !empty($updated_activeDegreeID)) {
+            $this->users->updateUser("activeDegreeID", $updated_activeDegreeID, Session::get(SESSION_USERID));
         }
-        if ($updated_first_name != $first_name) {
-            $this->users->updateUser($fields[0], $updated_first_name, $ID);
+        if ($updated_first_name != $first_name && !empty($updated_first_name)) {
+            $this->users->updateUser("userFirstName", $updated_first_name, Session::get(SESSION_USERID));
         }
-        if ($updated_last_name != $last_name) {
-            $this->users->updateUser($fields[1], $updated_last_name, $ID);
+        if ($updated_last_name != $last_name && !empty($updated_last_name)) {
+            $this->users->updateUser("userLastName", $updated_last_name, Session::get(SESSION_USERID));
         }
-        if ($updated_email != $email) {
-            $this->users->updateUser($fields[2], $updated_email, $ID);
+        if ($updated_email != $email && !empty($updated_email)) {
+            $this->users->updateUser("userEmail", $updated_email, Session::get(SESSION_USERID));
         }
-        if ($updated_display_name != $display_name) {
-            $this->users->updateUser($fields[3], $updated_display_name, $ID);
+        if ($updated_display_name != $display_name && !empty($updated_display_name)) {
+            $this->users->updateUser("userDisplayName", $updated_display_name, Session::get(SESSION_USERID));
         }
 
+        $ID = Session::get(SESSION_USERID);
         Application::$app->redirect("../profile?ID=$ID");
     }
 
@@ -124,7 +132,7 @@ class SettingsController extends Controller
      * Get the current settings and return the fields.
      * @return false|string
      */
-    public function fetch()
+    public function fetch(): bool|string
     {
         $user = $this->users->getUser(Session::get(SESSION_USERID));
         $first_name = $user["userFirstName"];
@@ -147,6 +155,6 @@ class SettingsController extends Controller
 
         $this->users->terminateAccount($userID);
         $this->users->logout();
-        Application::$app->redirect("/UniShare/");
+        Application::$app->redirect("/9.0/");
     }
 }
